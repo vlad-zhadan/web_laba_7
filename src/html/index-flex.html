@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/style-flex.css" />
+    <title>Ice cream with flex for mobile</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-main">
+            <p class="normal">
+                Смакує як вчора, відчувається як завтра!
+            </p>
+            <h1 class="header-slogan">MOROZIVO</h1>
+        </div>
+        <div class="header-menu" onclick=showSidebar()>
+            <svg xmlns="http://www.w3.org/2000/svg" height="20"  viewBox="0 -960 960 960" width="24">
+                <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+            </svg>
+        </div>
+       
+    </header>
+
+    <main class="container">
+
+        <div class="left-bar fixed-column">
+            <div class="find-left-bar  border">
+                <p class="normal">
+                    Морозиво смачніше, якщо частинка залишиться на футболці💅
+                </p>
+            </div>
+            <div class="news-left-bar center border">
+                <div class="close-menu" onclick=hideSidebar()>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                    </svg>
+                </div>
+                <div class="btn-group ">
+                    
+                    <a href="index.html" class="button">Без grid та flex</a>
+                    <a href="index-grid.html" class="button">З grid</a>
+                    <a href="index-flex.html" class="button">З flex and mobile</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="center-bar flexible-column">
+            <div class="main-center-bar center ">
+                <div class="img-collector">
+                    <img src="../../img/pngwing.com.png" alt="Ice cream" class="ice-cream image" usemap="#image_map">
+                </div>
+            </div>
+
+            <div class="bottom-center-bar border">
+                <button class="center" onclick="createWorkArea()"> Play</button>
+            </div>
+        </div>
+
+        <div class="right-bar normal border fixed-column">
+            <ul class="list-content">
+                <li>Морозиво-телепортатор: Десь в Кариби однією ложкою!</li>
+                <li>Морозиво з антигравітаційним ефектом: Летіть, їжте і не прилипайте до стелі!</li>
+                <li>Морозиво-детектор брехні: Розкриває всі таємниці насолоди!</li>
+                <li>Морозиво для динозаврів: Рекомендоване для історичних вечірок!</li>
+                <li>Морозиво-термітор: Правильно охолоджує та руйнує будь-які припони!</li>
+            </ul>
+        </div>
+
+    </main>
+    <footer class="footer-bar">
+        <ol>
+            <li>ми</li>
+            <li>також ми</li>
+            <li>ну може і вони</li>
+        </ol>
+        <h1 class="footer-slogan ">MOROZIVO</h1>
+    </footer>
+
+    <script>
+        function showSidebar(){
+            const sidebar = document.querySelector('.news-left-bar')
+            sidebar.style.display = 'flex'
+
+            const closeMenu = document.querySelector('.close-menu')
+            closeMenu.style.display = 'flex'
+        }
+
+        function hideSidebar(){
+            const sidebar = document.querySelector('.news-left-bar')
+            sidebar.style.display = 'none'
+
+            const closeMenu = document.querySelector('.close-menu')
+            closeMenu.style.display = 'none'
+        }
+
+       function handleWindowResize() {
+            var reswidth = screen.width;
+            const sidebar = document.querySelector('.news-left-bar')
+
+
+            if (reswidth < 450) {
+                sidebar.style.display = 'none'
+
+                const closeMenu = document.querySelector('.close-menu')
+                if( closeMenu.style.display == 'flex'){
+                    hideSidebar()
+                }
+
+            } else {
+                sidebar.style.display = 'flex'
+            }
+
+            
+        }
+
+        // Initial check when the page loads
+        handleWindowResize();
+
+        // Add an event listener to check for window resize
+        window.addEventListener('resize', handleWindowResize);
+    </script>
+    <script src="../js/setAnimation.js"></script>
+    <script src="../js/anim.js"></script>
+
+</body>
+
+</html>

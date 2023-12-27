@@ -59,6 +59,8 @@ function createButton(text, onclickHandler, container) {
 
 async function removeWorkArea() {
 	document.getElementsByClassName('btn-group')[0].style.display = "none";
+	document.getElementsByClassName('news-left-bar')[0].style.overflowY = "scroll";
+	document.getElementsByClassName('news-left-bar')[0].style.maxHeight = "900px";
 
 	let section = document.querySelector('.main-center-bar');
 	removeAllChildren(section);

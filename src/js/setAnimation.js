@@ -58,6 +58,8 @@ function createButton(text, onclickHandler, container) {
 }
 
 async function removeWorkArea() {
+	document.getElementsByClassName('btn-group')[0].style.display = "none";
+
 	let section = document.querySelector('.main-center-bar');
 	removeAllChildren(section);
 	animation.stopAnimation();

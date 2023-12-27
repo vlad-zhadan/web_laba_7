@@ -1,6 +1,5 @@
 <?php 
-	//$conn = new mysqli("sql107.infinityfree.com", "if0_35604074", "WLINGKsA6eWB", "if0_35604074_lab7DB");
-	if ($conn->connect_error)
+	$conn = new mysqli("sql207.infinityfree.com", "if0_35685630", "ZeMZWBBVcXrFZ9", "if0_35685630_laba7");
     	die("Connection failed: " . $conn->connect_error);
     
 	$sql="DELETE FROM messages";

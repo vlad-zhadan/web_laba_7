@@ -34,6 +34,7 @@ class Square {
 	}
 
 	move() {
+
 		
 		if(this.#totalPath >= 0.1 ){
 			this.#x += (0.1 * this.#directionX);
@@ -41,10 +42,16 @@ class Square {
 			this.#totalPath -= 0.1
 		}else if(this.#totalPath == 0){
 			return
-		}else{
+		}
+		else{
 			this.#x += (this.#totalPath * this.#directionX);
 			this.#y += (this.#totalPath * this.#directionY);
 			this.#totalPath = 0
+		}
+			
+		let message = this.#color + " square moved";
+		if(this.pathEnded()){
+			
 		}
 	}
 
@@ -52,9 +59,11 @@ class Square {
 		let message = this.#color + " square touched border";
 		if(this.#x < 0 || (this.#x+this.#size) > this.#canvas.width) {
 			this.#directionX = - this.#directionX;
+			
 		}
 		if(this.#y < 0 || (this.#y+this.#size) > this.#canvas.height) {
 			this.#directionY = - this.#directionY;
+			
 		}
 	}
 
@@ -91,7 +100,7 @@ class Square {
 	}
 
 	addSpeed(){
-		this.#speed += 5
+		this.#speed += 1
 	} 
 }
 
@@ -127,8 +136,8 @@ class Animation {
 		this.#square1Size = 10;
 		this.#square1X = getRandomArbitrary(0, 0.9 * this.#canvas.width);
 		this.#square1Y = getRandomArbitrary(0, 0.9 * this.#canvas.height);
-		this.#square1Speed = 800;
-		this.#square1DirectionX = -1;
+		this.#square1Speed = 500;
+		this.#square1DirectionX = 1;
 		this.#square1DirectionY = 0;
 		this.#square1Color = "red";
 
@@ -162,12 +171,6 @@ class Animation {
 		
 		this.drawTexture()		
 		
-		this.#square1X = getRandomArbitrary(0, 0.9 * this.#canvas.width);
-		this.#square1Y = getRandomArbitrary(0, 0.9 * this.#canvas.height);
-
-		this.#square2X = getRandomArbitrary(0, 0.9 * this.#canvas.width);
-		this.#square2Y = getRandomArbitrary(0, 0.9 * this.#canvas.height);
-
 		this.#square1.setCoords(this.#square1X, this.#square1Y);
 		this.#square1.draw();
 
@@ -185,12 +188,14 @@ class Animation {
 		
 		this.#animationTimer = setInterval(() => {
 				const currentDirection = possibleDirections[currentDirectionIndex];
+				//console.log(currentDirection[0], currentDirection[1]);
 				this.#square1.setDirection(currentDirection[0], currentDirection[1])
 				this.#square1.setTotalPath()
 
 				this.#square2.setDirection(currentDirection[0], currentDirection[1])
 				this.#square2.setTotalPath()
 
+				//
 				while(!this.#square1.pathEnded() && !this.#square2.pathEnded()){
 					this.clearContext();
 					this.drawTexture();	
@@ -201,17 +206,11 @@ class Animation {
 
 					if(this.#square1.collide(this.#square2)) {
 						let message = "Collide!";
-						messageNumber += 1
-						console.log(messageNumber)
 						console.log(message)
-						displayMessage(message);
-						saveMessageInLocalStorage(message);
-						saveMessageInDB(message);
-
 						this.stopAnimation();
-						document.getElementById('stopBtn').style.display = "none";
-						document.getElementById('reloadBtn').style.display = "";
-						return
+						return;
+						// document.getElementById('stopBtn').style.display = "none";
+						// document.getElementById('reloadBtn').style.display = "";
 					}
 
 					this.#square1.draw();
@@ -220,26 +219,16 @@ class Animation {
 					
 					if(this.#square1.collide(this.#square2)) {
 						let message = "Collide!";
-						messageNumber += 1
-						console.log(messageNumber)
 						console.log(message)
-						displayMessage(message);
-						saveMessageInLocalStorage(message);
-						saveMessageInDB(message);
-
 						this.stopAnimation();
-						document.getElementById('stopBtn').style.display = "none";
-						document.getElementById('reloadBtn').style.display = "";
-						return
+						return;
+						// document.getElementById('stopBtn').style.display = "none";
+						// document.getElementById('reloadBtn').style.display = "";
 					}
 			
 				}
+				
 
-				let message = "Red and Green made circle!";
-				messageNumber += 1
-				console.log(messageNumber)
-				saveMessageInLocalStorage(message);
-				saveMessageInDB(message);
 
 				currentDirectionIndex = (currentDirectionIndex + 1) % possibleDirections.length;
 				this.#square1.addSpeed()
@@ -257,145 +246,3 @@ class Animation {
 	}
 }
 
-
-function displayMessage(message) {
-	let messagesParagraph = document.getElementById('messages');
-	messagesParagraph.textContent = message;
-}
-
-async function saveMessageInDB(messageToSave) {
-	let dataToSave = {
-		message : messageToSave,
-		number : messageNumber
-	}
-	messageNumber++;
-
-	let response = await fetch('../php/saveData.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataToSave)
-            });
-	let data = await response.text();
-	console.log(data);
-}
-
-function saveMessageInLocalStorage(messageToSave) {
-	let currentDateAndTime = getCurrentDateAndTime();
-	
-	let dataToSave = {
-		message : messageToSave,
-		number : messageNumber,
-		date: currentDateAndTime
-	}
-
-	let jsonData = JSON.stringify(dataToSave);
-	localStorage.setItem([messageNumber], jsonData);
-}
-
-function getCurrentDateAndTime() {
-	let currentDate = new Date();
-
-	let year = currentDate.getFullYear();
-	let month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Months are zero-based
-	let day = ('0' + currentDate.getDate()).slice(-2);
-	let hours = ('0' + currentDate.getHours()).slice(-2);
-	let minutes = ('0' + currentDate.getMinutes()).slice(-2);
-	let seconds = ('0' + currentDate.getSeconds()).slice(-2);
-
-	let formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-	return formattedDateTime;
-}
-
-async function saveDataFromLocalStorageIntoDB() {
-	let localStorageData = [];
-
-	for(let i = 0; i < localStorage.length; i++) {
-		let key = localStorage.key(i);
-		let value = localStorage.getItem(key);
-
-		let parsedValue = JSON.parse(value);
-		localStorageData.push(parsedValue);
-	}
-
-	let response = await fetch('../php/saveDataFromLocalStorage.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({data: localStorageData})
-            });
-	let data = await response.text();
-	console.log(data);
-}
-
-async function createMessagesTable() {
-	createFirstRow();
-
-	let response = await fetch('../php/getData.php');
-	let data = await response.json();
-
-
-	for(let i = 0; i < data.length; i++)
-	   addRow(data[i]);
-}
-
-function createFirstRow() {
-	let table = document.createElement('table');
-	table.setAttribute('id', 'messagesTable');
-
-	let firstRow = document.createElement('tr');
-
-	let numberHeader = document.createElement('th');
-	numberHeader.textContent = "Number";
-	firstRow.append(numberHeader);
-
-	let DBDateHeader = document.createElement('th');
-	DBDateHeader.textContent = "DB Date";
-	firstRow.append(DBDateHeader);
-
-	let localStorageDateHeader = document.createElement('th');
-	localStorageDateHeader.textContent = "Local Storage Date";
-	firstRow.append(localStorageDateHeader);
-
-	let messageHeader = document.createElement('th');
-	messageHeader.textContent = "Message";
-	firstRow.append(messageHeader);
-
-	table.append(firstRow);
-
-	let section = document.querySelector('.news-left-bar');
-	section.append(table);
-}
-
-function addRow(data) {
-	let table = document.getElementById('messagesTable');
-
-	let row = document.createElement('tr');
-
-	let numberData = document.createElement('td');
-	numberData.textContent = data.number;
-	row.append(numberData);
-
-	let DBDateData = document.createElement('td');
-	DBDateData.textContent = data.date;
-	row.append(DBDateData);
-
-	let localStorageDateData = document.createElement('td');
-	localStorageDateData.textContent = data.localStorageDate;
-	row.append(localStorageDateData);
-
-	let messageData = document.createElement('td');
-	messageData.textContent = data.message;
-	row.append(messageData);
-
-	table.append(row);
-}
-
-function removeMessagesTable() {
-	let table = document.getElementById('messagesTable');
-
-	if(table)
-		table.remove();
-}

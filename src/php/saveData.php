@@ -1,7 +1,8 @@
 <?php 
 	$data = json_decode(file_get_contents("php://input"));
 
-	$conn = new mysqli("sql207.infinityfree.com", "if0_35685630", "ZeMZWBBVcXrFZ9", "if0_35685630_laba7");
+	require_once 'config.php';
+	$conn = new mysqli(HOST_NAME, USER_NAME, PASSWORD, DATABASE);
 	if ($conn->connect_error)
     	die("Connection failed: " . $conn->connect_error);
     
